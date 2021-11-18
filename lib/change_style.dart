@@ -17,7 +17,7 @@ class _ChangeStylePageState extends State<ChangeStylePage> {
   bool _hasShadow = true;
   bool _blur = false;
 
-  String _selected = "basic";
+  String _selected = 'basic';
 
   @override
   void initState() {
@@ -35,44 +35,47 @@ class _ChangeStylePageState extends State<ChangeStylePage> {
   static const platform = MethodChannel('samples.flutter.dev/windowController');
 
   Future<void> _invokeMethod(String method, Map<String, dynamic> arg) async {
-    await platform.invokeMethod(method, arg);
+    await platform.invokeMethod<void>(method, arg);
   }
 
   Future<void> _setClear() async {
-    await _invokeMethod("transparent", <String, dynamic>{
-      "isClear": _isClear,
+    await _invokeMethod('transparent', <String, dynamic>{
+      'isClear': _isClear,
     });
   }
 
   Future<void> _setShadow() async {
-    await _invokeMethod("hasShadow", <String, dynamic>{
-      "hasShadow": _hasShadow,
+    await _invokeMethod('hasShadow', <String, dynamic>{
+      'hasShadow': _hasShadow,
     });
   }
 
   Future<void> _setBlur() async {
-    await _invokeMethod("blur", <String, dynamic>{
-      "blur": _blur,
+    await _invokeMethod('blur', <String, dynamic>{
+      'blur': _blur,
     });
   }
 
   Future<void> _setBackground() async {
-    await _invokeMethod("background", <String, dynamic>{
-      "background": null,
-      "red": 256 - _dialogPickerColor.red,
-      "blue": 256 - _dialogPickerColor.blue,
-      "green": 256 - _dialogPickerColor.green,
-      "alpha": 256 - _dialogPickerColor.alpha,
+    await _invokeMethod('background', <String, dynamic>{
+      'background': null,
+      'red': 256 - _dialogPickerColor.red,
+      'blue': 256 - _dialogPickerColor.blue,
+      'green': 256 - _dialogPickerColor.green,
+      'alpha': 256 - _dialogPickerColor.alpha,
     });
   }
 
   Future<void> _reset() async {
-    await _invokeMethod("reset", <String, dynamic>{
-      "reset": true,
+    await _invokeMethod('reset', <String, dynamic>{
+      'reset': true,
     });
   }
 
-  Widget switchContainer(String label, bool value, Function fn) {
+  Widget switchContainer(
+      {required String label,
+      required bool value,
+      required void Function(bool) fn}) {
     return SwitchListTile.adaptive(
       title: Text(label),
       value: value,
@@ -80,9 +83,9 @@ class _ChangeStylePageState extends State<ChangeStylePage> {
     );
   }
 
-  _onSelected(value) {
+  void _onSelected(String? value) {
     setState(() {
-      _selected = value;
+      _selected = value ?? '';
     });
   }
 
@@ -97,11 +100,11 @@ class _ChangeStylePageState extends State<ChangeStylePage> {
               const SizedBox(height: 25),
               RadioListTile(
                 title: const Text('Basic'),
-                value: "basic",
+                value: 'basic',
                 groupValue: _selected,
                 onChanged: _onSelected,
               ),
-              _selected != "basic"
+              _selected != 'basic'
                   ? const SizedBox()
                   : ElevatedButton(
                       child: const Text('reset window style'),
@@ -111,45 +114,53 @@ class _ChangeStylePageState extends State<ChangeStylePage> {
                     ),
               RadioListTile(
                 title: const Text('hasShadow'),
-                value: "hasshadow",
+                value: 'hasshadow',
                 groupValue: _selected,
                 onChanged: _onSelected,
               ),
-              _selected != "hasshadow"
+              _selected != 'hasshadow'
                   ? const SizedBox()
-                  : switchContainer("hasShadow", _hasShadow, (bool e) {
-                      setState(() => {_hasShadow = e, _setShadow()});
-                    }),
+                  : switchContainer(
+                      label: 'hasShadow',
+                      value: _hasShadow,
+                      fn: (bool e) {
+                        setState(() => {_hasShadow = e, _setShadow()});
+                      }),
               RadioListTile(
                 title: const Text('transparent'),
-                value: "transparent",
+                value: 'transparent',
                 groupValue: _selected,
                 onChanged: _onSelected,
               ),
-              _selected != "transparent"
+              _selected != 'transparent'
                   ? const SizedBox()
-                  : switchContainer("background color clear", _isClear,
-                      (bool e) {
-                      setState(() => {_isClear = e, _setClear()});
-                    }),
+                  : switchContainer(
+                      label: 'background color clear',
+                      value: _isClear,
+                      fn: (bool e) {
+                        setState(() => {_isClear = e, _setClear()});
+                      }),
               RadioListTile(
                 title: const Text('blur'),
-                value: "blur",
+                value: 'blur',
                 groupValue: _selected,
                 onChanged: _onSelected,
               ),
-              _selected != "blur"
+              _selected != 'blur'
                   ? const SizedBox()
-                  : switchContainer("blur", _blur, (bool e) {
-                      setState(() => {_blur = e, _setBlur()});
-                    }),
+                  : switchContainer(
+                      label: 'blur',
+                      value: _blur,
+                      fn: (bool e) {
+                        setState(() => {_blur = e, _setBlur()});
+                      }),
               RadioListTile(
                 title: const Text('background color'),
-                value: "background",
+                value: 'background',
                 groupValue: _selected,
                 onChanged: _onSelected,
               ),
-              _selected != "background"
+              _selected != 'background'
                   ? const SizedBox()
                   : ColorPicker(
                       color: _dialogPickerColor,

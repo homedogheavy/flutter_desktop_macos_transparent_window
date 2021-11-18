@@ -33,7 +33,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        title: const Text("change window style"),
+        title: const Text('change window style'),
       ),
       body: const ChangeStylePage(),
     );
